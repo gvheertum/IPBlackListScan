@@ -17,10 +17,10 @@ namespace IPBlackListCheck.Library
 
 		private const string BarracudaSuffix = "b.barracudacentral.org";
 
-		public void ReadBarracudaResponse(IPCheck check)
+		public IPCheck ValidateBarracudaBlacklist(IPCheck check)
 		{
-			
 			check.Status = CheckDNSRecordInBarracuda(check.IPToCheck);
+			return check;
 		}
 
 		private IPCheckStatus CheckDNSRecordInBarracuda(string hostname)
@@ -34,12 +34,21 @@ namespace IPBlackListCheck.Library
 
 				IPHostEntry host = Dns.GetHostEntry(nsToLookup);
 				System.Console.WriteLine($"{host.HostName}");
-				host?.Aliases.ToList().ForEach(a => System.Console.WriteLine($"Alias: {a}"));
-				host?.AddressList.ToList().ForEach(a => System.Console.WriteLine($"Address: {a}"));
+				if(host?.AddressList?.Any() == true)
+				{
+					System.Console.WriteLine("Element has at least one address match, indicating this is a blacklisted entry");
+					return IPCheckStatus.BlackListed;
+				}
+				System.Console.WriteLine("No addresses found, but the item resolved, unknown status");
 				return IPCheckStatus.Unknown;
 			}
 			catch(Exception e)
 			{
+				if(string.Equals("Device not configured", e.Message, StringComparison.OrdinalIgnoreCase))
+				{
+					System.Console.WriteLine("No match found in the barracuda list");
+					return IPCheckStatus.NotOnBlackList;
+				}
 				Console.WriteLine($"Error: {e.Message}");
 				return IPCheckStatus.Unknown;
 			}
