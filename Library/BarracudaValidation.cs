@@ -9,6 +9,7 @@ namespace IPBlackListCheck.Library
 	{
 		private string ReverseIP(string ip)
 		{
+			if(ip.Count(c => c == '.') != 3) { throw new Exception($"{ip} is not an IP address"); }
 			var split = ip.Split(new char[] { '.'}).ToList();
 			split.Reverse();
 			return string.Join(".", split);
@@ -18,9 +19,7 @@ namespace IPBlackListCheck.Library
 
 		public void ReadBarracudaResponse(IPCheck check)
 		{
-			string reversedIp = ReverseIP(check.IPToCheck);
-			string nsToLookup = $"{reversedIp}.{BarracudaSuffix}";
-			Console.WriteLine($"[{check.Name}] Trying to lookup: {nsToLookup}");
+			
 			check.Status = CheckDNSRecordInBarracuda(check.IPToCheck);
 		}
 
@@ -28,7 +27,12 @@ namespace IPBlackListCheck.Library
 		{
 			try 
 			{
-				IPHostEntry host = Dns.GetHostEntry(hostname);
+				string reversedIp = ReverseIP(hostname);
+				string nsToLookup = $"{reversedIp}.{BarracudaSuffix}";
+				Console.WriteLine($"Trying to lookup: {nsToLookup}");
+				
+
+				IPHostEntry host = Dns.GetHostEntry(nsToLookup);
 				System.Console.WriteLine($"{host.HostName}");
 				host?.Aliases.ToList().ForEach(a => System.Console.WriteLine($"Alias: {a}"));
 				host?.AddressList.ToList().ForEach(a => System.Console.WriteLine($"Address: {a}"));
