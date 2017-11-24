@@ -23,33 +23,35 @@ namespace IPBlackListCheck.Library
 			return check;
 		}
 
+		private static string[] MessagesIndicatingNotBlacklisted = new string[] { "No such host is known", "Device not configured" };
+
 		private IPCheckStatus CheckDNSRecordInBarracuda(string hostname)
 		{
 			try 
 			{
 				string reversedIp = ReverseIP(hostname);
 				string nsToLookup = $"{reversedIp}.{BarracudaSuffix}";
-				Console.WriteLine($"Trying to lookup: {nsToLookup}");
+				//Console.WriteLine($"Trying to lookup: {nsToLookup}");
 				
 
 				IPHostEntry host = Dns.GetHostEntry(nsToLookup);
-				System.Console.WriteLine($"{host.HostName}");
+				//System.Console.WriteLine($"{host.HostName}");
 				if(host?.AddressList?.Any() == true)
 				{
-					System.Console.WriteLine("Element has at least one address match, indicating this is a blacklisted entry");
+					//System.Console.WriteLine("Element has at least one address match, indicating this is a blacklisted entry");
 					return IPCheckStatus.BlackListed;
 				}
-				System.Console.WriteLine("No addresses found, but the item resolved, unknown status");
+				//System.Console.WriteLine("No addresses found, but the item resolved, unknown status");
 				return IPCheckStatus.Unknown;
 			}
 			catch(Exception e)
 			{
-				if(string.Equals("Device not configured", e.Message, StringComparison.OrdinalIgnoreCase))
+				if(MessagesIndicatingNotBlacklisted.Any(m => string.Equals(m, e.Message, StringComparison.OrdinalIgnoreCase)))
 				{
-					System.Console.WriteLine("No match found in the barracuda list");
+					//System.Console.WriteLine("No match found in the barracuda list");
 					return IPCheckStatus.NotOnBlackList;
 				}
-				Console.WriteLine($"Error: {e.Message}");
+				//Console.WriteLine($"Error: {e.Message}");
 				return IPCheckStatus.Unknown;
 			}
 		}
