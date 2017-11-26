@@ -9,10 +9,10 @@ namespace IPBlackListCheck
     {
         static void Main(string[] args)
         {
-			var ipsToCheck = new IPCheckList().GetCheckItems().ToList();
+			var ipsToCheck = new IPListingChecker().GetDefaultCheckList().ToList();
 			Console.WriteLine($"Received {ipsToCheck.Count()} items to check");
-            ipsToCheck = ipsToCheck.Select(i => new BarracudaValidation().ValidateBarracudaBlacklist(i)).ToList();
-			ipsToCheck.ForEach(i => EchoIPConfig(i));
+            var checkedIPs = new IPListingChecker().ValidateAddresses(ipsToCheck);
+			checkedIPs.ToList().ForEach(i => EchoIPConfig(i));
         }
 
 		private static void EchoIPConfig(IPCheck check)
@@ -30,7 +30,7 @@ namespace IPBlackListCheck
 				default: break;
 			}
 			Console.ForegroundColor = newColor;
-			System.Console.WriteLine($"{messagePrefix} {check.IPToCheck} ({check.Name}) {check.Message}");
+			System.Console.WriteLine($"{messagePrefix} {(check.IPToCheck).PadRight(16)} {(check.Name).PadRight(20)} {check.Message}");
 			Console.ForegroundColor = oldColor;
 		}
     }

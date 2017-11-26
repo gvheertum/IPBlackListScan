@@ -11,5 +11,6 @@
     <Content Include="Library\BarracudaValidation.cs" />
     <Content Include="Library\IPCheckList.cs" />
     <Content Include="Library\IPCheckStatus.cs" />
+    <Content Include="Library\IPListingChecker.cs" />
   </ItemGroup>
 </Project>
