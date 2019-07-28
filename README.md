@@ -7,3 +7,5 @@ Example:
 ```
 127.0.0.1;Test Localhost
 ```
+
+The default test set has a baracuda test IP, which should always result in a "blacklisted" result (and will confirm the service is up)

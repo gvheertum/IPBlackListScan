@@ -13,7 +13,7 @@ namespace IPBlackListCheck.Library
 
 		public IEnumerable<IPCheck> GetItemsForTest()
 		{
-			yield return new IPCheck("Barracuda test", "127.0.0.2");
+			yield return new IPCheck("Barracuda test (should alwas show as blacklisted)", "127.0.0.2");
 		}
 
 		public IEnumerable<IPCheck> GetItemsFromIpListFile() 
