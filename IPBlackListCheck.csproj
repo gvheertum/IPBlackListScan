@@ -12,5 +12,6 @@
     <Content Include="Library\IPCheckList.cs" />
     <Content Include="Library\IPCheckStatus.cs" />
     <Content Include="Library\IPListingChecker.cs" />
+    <Content Include="Library\IPListRetriever.cs" />
   </ItemGroup>
 </Project>

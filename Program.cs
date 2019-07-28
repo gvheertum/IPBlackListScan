@@ -9,8 +9,9 @@ namespace IPBlackListCheck
     {
         static void Main(string[] args)
         {
-			var ipsToCheck = new IPListingChecker().GetDefaultCheckList().ToList();
+			var ipsToCheck = new IPListRetriever().GetIpList().ToList();
 			Console.WriteLine($"Received {ipsToCheck.Count()} items to check");
+			
             var checkedIPs = new IPListingChecker().ValidateAddresses(ipsToCheck);
 			checkedIPs.ToList().ForEach(i => EchoIPConfig(i));
         }
