@@ -13,5 +13,8 @@
     <Content Include="Library\IPCheckStatus.cs" />
     <Content Include="Library\IPListingChecker.cs" />
     <Content Include="Library\IPListRetriever.cs" />
+    <Content Include="ip.list">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
